@@ -43,6 +43,8 @@ public class SequrityConfig {
                 .loginProcessingUrl("/authenticate")
                 .defaultSuccessUrl("/design")
                 .and()
+                .logout()
+                .and()
                 .build();
     }
 
