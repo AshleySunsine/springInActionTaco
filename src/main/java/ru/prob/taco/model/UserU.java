@@ -15,6 +15,11 @@ import javax.persistence.Id;
 import java.util.Arrays;
 import java.util.Collection;
 
+/**
+ * Называем класс UserU, а не просто User, т.к, кажется,
+ * что spring sequrity уже использует таблицу с названием User
+ * для себя. Получается конфликт.
+ */
 @Entity
 @Data
 @NoArgsConstructor(access = AccessLevel.PRIVATE, force = true)

@@ -15,7 +15,6 @@ public class Taco {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
     private Date createdAt = new Date();
-    @SuppressWarnings("checkstyle:WhitespaceAround")
     @NotNull
     @Size(min = 2, message = "Name must be at least 2 characters long")
     private String name;
