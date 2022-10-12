@@ -1,9 +1,6 @@
 package ru.prob.taco.model;
 
-import lombok.AccessLevel;
 import lombok.Data;
-import lombok.NoArgsConstructor;
-import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -22,8 +19,6 @@ import java.util.Collection;
  */
 @Entity
 @Data
-@NoArgsConstructor(access = AccessLevel.PRIVATE, force = true)
-@RequiredArgsConstructor
 public class UserU implements UserDetails {
     private static final long serialVersionUID = 1L;
 
@@ -39,6 +34,28 @@ public class UserU implements UserDetails {
     private final String state;
     private final String zip;
     private final String phoneNumber;
+
+    private UserU() {
+        this.username = null;
+        this.password = null;
+        this.fullname = null;
+        this.street = null;
+        this.city = null;
+        this.state = null;
+        this.zip = null;
+        this.phoneNumber = null;
+    }
+
+    public UserU(String username, String password, String fullname, String street, String city, String state, String zip, String phoneNumber) {
+        this.username = username;
+        this.password = password;
+        this.fullname = fullname;
+        this.street = street;
+        this.city = city;
+        this.state = state;
+        this.zip = zip;
+        this.phoneNumber = phoneNumber;
+    }
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
