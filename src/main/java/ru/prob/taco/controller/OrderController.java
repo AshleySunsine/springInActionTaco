@@ -4,32 +4,34 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.autoconfigure.data.web.SpringDataWebProperties;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.Errors;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.SessionAttributes;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.bind.support.SessionStatus;
 import ru.prob.taco.data.OrderRepository;
 import ru.prob.taco.model.TacoOrder;
 import ru.prob.taco.model.UserU;
+import ru.prob.taco.service.OrderMessagingService;
 import ru.prob.taco.web.OrderProps;
 
 import javax.validation.Valid;
 
 @Slf4j
 @Controller
-@RequestMapping("/orders")
+@RequestMapping(path = "/orders", produces = "application/json")
+@CrossOrigin(origins = "http://localhost:8080")
 @SessionAttributes("tacoOrder")
 public class OrderController {
     private OrderRepository orderRepo;
+    private OrderMessagingService messagingService;
     private OrderProps props;
 
-    public OrderController(OrderRepository orderRepo, OrderProps props) {
+    public OrderController(OrderRepository orderRepo, OrderMessagingService messagingService, OrderProps props) {
         this.orderRepo = orderRepo;
+        this.messagingService = messagingService;
         this.props = props;
     }
 
@@ -39,6 +41,7 @@ public class OrderController {
     }
 
     @PostMapping
+    @ResponseStatus(HttpStatus.CREATED)
     public String processOrder(@Valid TacoOrder order,
                                Errors errors,
                                SessionStatus sessionStatus,
@@ -47,7 +50,7 @@ public class OrderController {
             return "orderForm";
         }
         order.setUserU(user);
-        orderRepo.save(order);
+        messagingService.sendOrder(orderRepo.save(order));
         log.info("OOOO---> Order submitted: {}", order);
         sessionStatus.setComplete();
         return "redirect:/";

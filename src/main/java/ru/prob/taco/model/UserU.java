@@ -9,6 +9,7 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import java.io.Serializable;
 import java.util.Arrays;
 import java.util.Collection;
 
@@ -19,7 +20,7 @@ import java.util.Collection;
  */
 @Entity
 @Data
-public class UserU implements UserDetails {
+public class UserU implements UserDetails, Serializable {
     private static final long serialVersionUID = 1L;
 
     @Id

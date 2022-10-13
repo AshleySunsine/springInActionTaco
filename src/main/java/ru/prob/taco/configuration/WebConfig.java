@@ -13,6 +13,7 @@ import ru.prob.taco.model.Ingredient;
 import ru.prob.taco.model.Taco;
 
 import java.util.Arrays;
+import java.util.Timer;
 
 @Configuration
 public class WebConfig implements WebMvcConfigurer {
@@ -68,6 +69,11 @@ public class WebConfig implements WebMvcConfigurer {
                     lettuce, salsa));
             tacoRepo.save(taco3);
         };
+    }
+
+    @Bean
+    public Timer getTimer() {
+        return new Timer();
     }
 
 }
