@@ -1,4 +1,4 @@
-package ru.prob.taco.service;
+package ru.prob.taco.service.artemismessageservice;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jms.core.JmsTemplate;
@@ -11,11 +11,11 @@ import javax.jms.Message;
 import javax.jms.Session;
 
 @Service
-public class JmsOrderMessagingService implements OrderMessagingService {
+public class ArtemisJmsOrderMessagingService implements ArtemisOrderMessagingService {
 private JmsTemplate jms;
 
     @Autowired
-    public JmsOrderMessagingService(JmsTemplate jms) {
+    public ArtemisJmsOrderMessagingService(JmsTemplate jms) {
         this.jms = jms;
     }
 

@@ -1,7 +1,6 @@
 package ru.prob.taco.controller;
 
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.boot.autoconfigure.data.web.SpringDataWebProperties;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
@@ -14,7 +13,8 @@ import org.springframework.web.bind.support.SessionStatus;
 import ru.prob.taco.data.OrderRepository;
 import ru.prob.taco.model.TacoOrder;
 import ru.prob.taco.model.UserU;
-import ru.prob.taco.service.OrderMessagingService;
+import ru.prob.taco.service.artemismessageservice.ArtemisOrderMessagingService;
+import ru.prob.taco.service.rabbitmessageservice.RabbitOrderMessagingService;
 import ru.prob.taco.web.OrderProps;
 
 import javax.validation.Valid;
@@ -26,12 +26,14 @@ import javax.validation.Valid;
 @SessionAttributes("tacoOrder")
 public class OrderController {
     private OrderRepository orderRepo;
-    private OrderMessagingService messagingService;
+    private ArtemisOrderMessagingService messagingService;
+    private RabbitOrderMessagingService rabbitOrderMessagingService;
     private OrderProps props;
 
-    public OrderController(OrderRepository orderRepo, OrderMessagingService messagingService, OrderProps props) {
+    public OrderController(OrderRepository orderRepo, ArtemisOrderMessagingService messagingService, RabbitOrderMessagingService rabbitOrderMessagingService, OrderProps props) {
         this.orderRepo = orderRepo;
         this.messagingService = messagingService;
+        this.rabbitOrderMessagingService = rabbitOrderMessagingService;
         this.props = props;
     }
 
@@ -50,7 +52,9 @@ public class OrderController {
             return "orderForm";
         }
         order.setUserU(user);
-        messagingService.sendOrder(orderRepo.save(order));
+        TacoOrder to = orderRepo.save(order);
+      //  messagingService.sendOrder(to); // send to Artemis
+       // rabbitOrderMessagingService.senOrder(to);  // send to RabbitMQ
         log.info("OOOO---> Order submitted: {}", order);
         sessionStatus.setComplete();
         return "redirect:/";

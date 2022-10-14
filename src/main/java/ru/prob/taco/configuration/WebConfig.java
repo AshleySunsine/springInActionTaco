@@ -1,5 +1,6 @@
 package ru.prob.taco.configuration;
 
+import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -9,6 +10,8 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 import ru.prob.taco.data.IngredientRepository;
 import ru.prob.taco.data.TacoRepository;
 import ru.prob.taco.data.UserRepository;
+import ru.prob.taco.kitchen.rabbit.activelistener.RabbitOrderReceiver;
+import ru.prob.taco.kitchen.rabbit.passivelistener.RabbitOrderListenerPassive;
 import ru.prob.taco.model.Ingredient;
 import ru.prob.taco.model.Taco;
 
@@ -75,5 +78,26 @@ public class WebConfig implements WebMvcConfigurer {
     public Timer getTimer() {
         return new Timer();
     }
+ /*
+    Artemis:
+
+    @Bean
+    public OrderListener getOrderListener() {
+        return new OrderListenerArtemis();
+    }
+ */
+/*
+//Rabbit
+
+    @Bean
+    public RabbitOrderReceiver getRabbitOrderReceiver(RabbitTemplate rabbitTemplate) {
+        return new RabbitOrderReceiver(rabbitTemplate);
+    }
+
+    @Bean
+    public RabbitOrderListenerPassive getRabbitListenerPassive() {
+        return new RabbitOrderListenerPassive();
+    }
+    */
 
 }

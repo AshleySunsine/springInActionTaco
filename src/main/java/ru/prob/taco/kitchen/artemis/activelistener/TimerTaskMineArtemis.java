@@ -1,14 +1,13 @@
-package ru.prob.taco.kitchen;
+package ru.prob.taco.kitchen.artemis.activelistener;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jms.core.JmsTemplate;
-import org.springframework.stereotype.Component;
 import ru.prob.taco.model.TacoOrder;
 
 import java.util.TimerTask;
 
-@Component
-public class TimerTaskMine extends TimerTask {
+//@Component
+public class TimerTaskMineArtemis extends TimerTask {
     @Autowired
     private JmsTemplate jms;
 
