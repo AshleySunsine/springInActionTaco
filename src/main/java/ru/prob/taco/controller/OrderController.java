@@ -14,6 +14,7 @@ import ru.prob.taco.data.OrderRepository;
 import ru.prob.taco.model.TacoOrder;
 import ru.prob.taco.model.UserU;
 import ru.prob.taco.service.artemismessageservice.ArtemisOrderMessagingService;
+import ru.prob.taco.service.kafkamessageservice.KafkaOrderMessagingService;
 import ru.prob.taco.service.rabbitmessageservice.RabbitOrderMessagingService;
 import ru.prob.taco.web.OrderProps;
 
@@ -28,12 +29,19 @@ public class OrderController {
     private OrderRepository orderRepo;
     private ArtemisOrderMessagingService messagingService;
     private RabbitOrderMessagingService rabbitOrderMessagingService;
+
+    private KafkaOrderMessagingService kafkaOrderMessagingService;
     private OrderProps props;
 
-    public OrderController(OrderRepository orderRepo, ArtemisOrderMessagingService messagingService, RabbitOrderMessagingService rabbitOrderMessagingService, OrderProps props) {
+    public OrderController(OrderRepository orderRepo,
+                           ArtemisOrderMessagingService messagingService,
+                           RabbitOrderMessagingService rabbitOrderMessagingService,
+                           KafkaOrderMessagingService kafkaOrderMessagingService,
+                           OrderProps props) {
         this.orderRepo = orderRepo;
         this.messagingService = messagingService;
         this.rabbitOrderMessagingService = rabbitOrderMessagingService;
+        this.kafkaOrderMessagingService = kafkaOrderMessagingService;
         this.props = props;
     }
 
@@ -53,8 +61,9 @@ public class OrderController {
         }
         order.setUserU(user);
         TacoOrder to = orderRepo.save(order);
-      //  messagingService.sendOrder(to); // send to Artemis
-       // rabbitOrderMessagingService.senOrder(to);  // send to RabbitMQ
+     // messagingService.sendOrder(to); // send to Artemis
+     // rabbitOrderMessagingService.senOrder(to);  // send to RabbitMQ
+        kafkaOrderMessagingService.sendOrder(to); //send to Kafka
         log.info("OOOO---> Order submitted: {}", order);
         sessionStatus.setComplete();
         return "redirect:/";
