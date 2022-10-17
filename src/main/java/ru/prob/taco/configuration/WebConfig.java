@@ -10,10 +10,12 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 import ru.prob.taco.data.IngredientRepository;
 import ru.prob.taco.data.TacoRepository;
 import ru.prob.taco.data.UserRepository;
+import ru.prob.taco.kitchen.kafka.KafkaOrderListener;
 import ru.prob.taco.kitchen.rabbit.activelistener.RabbitOrderReceiver;
 import ru.prob.taco.kitchen.rabbit.passivelistener.RabbitOrderListenerPassive;
 import ru.prob.taco.model.Ingredient;
 import ru.prob.taco.model.Taco;
+import ru.prob.taco.service.kafkamessageservice.KafkaOrderMessagingService;
 
 import java.util.Arrays;
 import java.util.Timer;
@@ -99,5 +101,12 @@ public class WebConfig implements WebMvcConfigurer {
         return new RabbitOrderListenerPassive();
     }
     */
+
+    //Kafka
+
+    @Bean
+    public KafkaOrderListener getKafkaOrderListener() {
+        return new KafkaOrderListener();
+    }
 
 }
